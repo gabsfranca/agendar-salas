@@ -152,7 +152,7 @@ const AgendamentoMajor = () => {
                                         horarioSelecionado.includes(horario) ? 'selecionado' : ''
                                     }`}
                                 onClick={() => handleClickHorario(horario)}
-                                disabled = {ocupado}
+                                // disabled = {ocupado}
                             >
                                 {horario}
                             </button>
