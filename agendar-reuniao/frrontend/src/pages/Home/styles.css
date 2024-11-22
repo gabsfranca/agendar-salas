@@ -1,43 +1,69 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body, html {
-    height: 100%;
-    font-family: Arial, sans-serif;
-    margin: 0;
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+.container {
+  display: flex; /* Organiza as divs lado a lado */
+  height: 100vh; /* A altura ocupa 100% da tela */
+  flex-wrap: wrap; /* Permite que as divs se movam para a linha seguinte em telas pequenas */
+}
+
+.half {
+  flex: 1; /* Cada div ocupa metade da tela */
+  display: flex;
+  justify-content: center;
+   /* Adiciona centralização vertical */
+  font-size: 2rem;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  background-size: cover; /* Faz a imagem cobrir a div */
+  background-position: center; /* Centraliza a imagem */
+  background-repeat: no-repeat; /* Evita repetição da imagem */
+  height: 100vh; /* Garante que a div ocupe 100% da altura da tela */
+}
+
+#left {
+  background-image: url('../../../public/imgMajor.jpg'); /* Exemplo de imagem para a esquerda */
+}
+
+#right {
+  background-image: url('../../../public/imgAlagoas.png'); /* Exemplo de imagem para a direita */
+}
+
+.half:hover {
+  opacity: 0.8; /* Efeito de hover para dar interatividade */
+}
+
+/* Media Queries para telas pequenas */
+@media (max-width: 768px) {
   .container {
-    display: flex; /* Organiza as divs lado a lado */
-    height: 100vh; /* A altura ocupa 100% da tela */
+      flex-direction: column; /* Coloca as divs uma embaixo da outra */
   }
-  
+
   .half {
-    flex: 1; /* Cada div ocupa metade da tela */
-    display: flex;
-    justify-content: center;
-    /* align-items: center; */
-    font-size: 2rem;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-    background-size: cover; /* Faz a imagem cobrir a div */
-    background-position: center; /* Centraliza a imagem */
-    background-repeat: no-repeat; /* Evita repetição da imagem */
-    /* color: blueviolet; */
+      flex: 1 1 100%; /* Cada div ocupa 100% da largura */
+      height: 50vh; /* Ajusta a altura para 50% da altura da tela */
   }
-  
-  #left {
-    background-image: url('../../../public/imgMajor.jpg'); /* Exemplo de imagem para a esquerda */
+}
+
+/* Media Queries para telas menores que 480px (smartphones em modo retrato) */
+@media (max-width: 480px) {
+  .half {
+      font-size: 1.5rem; /* Reduz o tamanho da fonte em telas muito pequenas */
   }
-  
-  #right {
-    background-image: url('../../../public/imgAlagoas.png'); /* Exemplo de imagem para a direita */
+}
+
+/* Media Queries para telas grandes (desktops maiores que 1200px) */
+@media (min-width: 1200px) {
+  .half {
+      font-size: 3rem; /* Aumenta a fonte em telas grandes */
   }
-  
-  .half:hover {
-    opacity: 0.8; /* Efeito de hover para dar interatividade */
-  } 
-  
+}

@@ -7,11 +7,6 @@
   justify-content: center; /* Centraliza os itens */
 }
 
-/* .esquerdinha{
-  width: 33%;
-
-} */
-
 .esquerdinha, .meinho, .direitinha {
   width: 100%; /* Cada coluna ocupa 100% da largura inicialmente */
   max-width: 300px; /* Define um tamanho máximo */
@@ -39,12 +34,6 @@
 }
 
 
-
-/* .calendario{
-  width: 300px;
-  height: 200px;
-} */
-
 body, html {
   height: 40%;
   font-family: Arial, sans-serif;
@@ -57,23 +46,9 @@ body, html {
   box-sizing: border-box; /* Inclui padding e border na largura */
 }
 
-/* .meinho {
-  align-items: center;
-  width: 33%;
-} */
-
 .selecionado {
   background-color: #45a049;
 }
-
-/* .direitinha {
-  align-items: center;
-
-  align-content: center;
-
-  width: 33%;
-  color: paleturquoise;
-} */
 
 .container-horarios{
   display: flex;
@@ -97,9 +72,15 @@ body, html {
 }
 
 .horario-btn.selecionado {
-  background-color: #4caf50;
+  background-color: #1087FF;
   color: white;
   font-weight: bold;
+}
+
+.horario-btn.ocupado {
+  background-color: red;
+  color: white;
+  cursor: pointer;
 }
 
 .reserva-form {
@@ -125,7 +106,7 @@ body, html {
   padding: 10px 15px;
   font-size: 16px;
   color: white;
-  background-color: #4caf50;
+  background-color: #1087FF;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -138,5 +119,5 @@ body, html {
 }
 
 .reserva-form button:hover:not(:disabled) {
-  background-color: #45a049;
+  background-color: #1087FF;
 }
