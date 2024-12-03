@@ -125,6 +125,7 @@ const AgendamentoMajor = () => {
     return(
 
         <div className='agendamento'>
+            {/* <h1>Agendamento Major</h1> */}
             <div className='esquerdinha' id='esquerda'>
                 <h1>Selecione o dia</h1>
                 <div className='calendar-container'>

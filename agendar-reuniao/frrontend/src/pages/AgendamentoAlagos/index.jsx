@@ -1,9 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Importar o estilo do calendário
 import './styles.css'
 
 const filial = 'alagoas';
+
+const horariosDisponiveis = [
+    '08:00','08:30',
+    '09:00','09:30',
+    '10:00','10:30',
+    '11:00','11:30',
+    '13:30',
+    '14:00','14:30',
+    '15:00','15:30',
+    '16:00','16:30',
+    '17:00','17:30',
+]
 
 const AgendamentoAlagoas = () => {
     
@@ -16,17 +28,7 @@ const AgendamentoAlagoas = () => {
         sede:'alagoas'
     });
 
-    const horariosDisponiveis = [
-        '08:00','08:30',
-        '09:00','09:30',
-        '10:00','10:30',
-        '11:00','11:30',
-        '13:30',
-        '14:00','14:30',
-        '15:00','15:30',
-        '16:00','16:30',
-        '17:00','17:30',
-    ]
+
 
     useEffect(() => {
         const fetchHorariosOcupados = async () => {
