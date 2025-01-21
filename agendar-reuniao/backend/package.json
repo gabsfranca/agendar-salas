@@ -12,7 +12,13 @@
   "dependencies": {
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "mkcert": "^3.2.0",
+    "node-outlook": "^1.1.8",
+    "passport": "^0.7.0",
+    "passport-azure-ad": "^4.3.5",
     "pg": "^8.13.1",
     "ws": "^8.18.0"
   }

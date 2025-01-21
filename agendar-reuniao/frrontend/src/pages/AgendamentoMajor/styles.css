@@ -87,7 +87,8 @@ body, html {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 18vh;
+  margin-bottom: 18vh;
 }
 
 .reserva-form label {
@@ -120,4 +121,9 @@ body, html {
 
 .reserva-form button:hover:not(:disabled) {
   background-color: #1087FF;
+}
+
+.titulo-direitinha {
+  color: blue;
+  margin-bottom: 300px;
 }

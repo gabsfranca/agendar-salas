@@ -172,16 +172,6 @@ const AgendamentoMajor = () => {
 
                 <form onSubmit={handleFormSubmit} className='reserva-form'>
                     <label>
-                        Nome:
-                        <input
-                            type='text'
-                            name='name'
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </label>
-                    <label>
                         Tema da reuniao:
                         <input
                             type='text'

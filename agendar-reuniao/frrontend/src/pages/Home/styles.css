@@ -14,13 +14,14 @@ body, html {
   display: flex; /* Organiza as divs lado a lado */
   height: 100vh; /* A altura ocupa 100% da tela */
   flex-wrap: wrap; /* Permite que as divs se movam para a linha seguinte em telas pequenas */
+  width: 100%;
 }
 
 .half {
   flex: 1; /* Cada div ocupa metade da tela */
   display: flex;
   justify-content: center;
-   /* Adiciona centralização vertical */
+  min-width: 50%;
   font-size: 2rem;
   cursor: pointer;
   transition: opacity 0.3s ease;
@@ -43,14 +44,18 @@ body, html {
 }
 
 /* Media Queries para telas pequenas */
-@media (max-width: 768px) {
+@media (max-width: 720px) {
   .container {
       flex-direction: column; /* Coloca as divs uma embaixo da outra */
+      height: auto;
   }
 
   .half {
-      flex: 1 1 100%; /* Cada div ocupa 100% da largura */
       height: 50vh; /* Ajusta a altura para 50% da altura da tela */
+      flex: 1 1 100%;
+      min-width: 100%;
+      height: 50vh;
+      flex: none;
   }
 }
 
