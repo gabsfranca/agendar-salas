@@ -1,2 +1,2 @@
-./backend/.env
-./backend/certificates
+.\backend\.env
+.\backend\certificates
