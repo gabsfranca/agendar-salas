@@ -1,2 +1,4 @@
 .\backend\.env
 .\backend\certificates
+./backend/certificates/certificate.crt
+./backend/certificates/private.key
