@@ -7,19 +7,27 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch('https://localhost:4000/api/check-auth', {
-          credentials: 'include'
+        const response = await fetch('https://192.168.0.178:4000/auth/check-auth', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json'
+          }
         });
 
+        console.log('response status: ', response.status);
+
         if (response.ok) {
+          const data = await response.json();
+          console.log('auth check data: ', data);
           setIsAuthenticated(true);
         } else {
-          // Redirect manually if not authenticated
-          window.location.href = 'https://localhost:4000/auth/login';
+          console.error('nao autenticado: ', response.status)
+          window.location.href = 'https://192.168.0.178:4000/auth/login';
         }
       } catch (error) {
         console.error('Erro ao verificar autenticação:', error);
-        window.location.href = 'https://localhost:4000/auth/login';
+        // window.location.href = 'https://localhost:4000/auth/error';
       } finally {
         setIsLoading(false);
       }

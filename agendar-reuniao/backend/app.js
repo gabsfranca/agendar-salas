@@ -23,6 +23,8 @@ app.use(passport.session());
 app.use(routes);
 
 app.use((err, req, res, next) => {
+    console.log('Session ID:', req.sessionID);
+    console.log('Session:', req.session);
     console.error('Error:', err);
     res.status(500).json({ error: 'Internal server error' });
 });

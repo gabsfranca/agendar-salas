@@ -23,7 +23,7 @@ passport.use(
             identityMetadata: `https://login.microsoftonline.com/${process.env.TENANT_ID}/v2.0/.well-known/openid-configuration`,
             clientID: process.env.CLIENT_ID,
             clientSecret: process.env.CLIENT_SECRET,
-            redirectUrl: 'https://localhost:4000/auth/callback',
+            redirectUrl: 'https://192.168.0.178:4000/auth/callback',
             responseType: 'code',
             responseMode: 'query',
             scope: ['openid', 'profile', 'email', 'offline_access'],
@@ -31,7 +31,7 @@ passport.use(
             passReqToCallback: true,
             loggingLevel: 'info',
             loggingNoPII: false,
-            usePKCE: true,
+            usePKCE: false,
             state: true
         },
         async (req, iss, sub, profile, accessToken, refreshToken, done) => {
