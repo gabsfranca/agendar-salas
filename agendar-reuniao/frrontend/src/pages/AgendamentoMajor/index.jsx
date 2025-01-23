@@ -32,7 +32,7 @@ const AgendamentoMajor = () => {
         const fetchHorariosOcupados = async () => {
             try {
                 const response = await fetch(
-                    `http://192.168.0.178:4000/horarios?date=${date.toISOString().split('T')[0]}&sede=${filial}`
+                    `https://192.168.0.178:4000/scheduling/horarios?date=${date.toISOString().split('T')[0]}&sede=${filial}`
                 );
                 const data = await response.json();
                 setHorariosOcupados(data);
@@ -94,7 +94,7 @@ const AgendamentoMajor = () => {
         };
 
         try{
-            const response = await fetch('http://192.168.0.178:4000/agendar', {
+            const response = await fetch('https://192.168.0.178:4000/scheduling/agendar', {
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json',
