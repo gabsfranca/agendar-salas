@@ -16,6 +16,7 @@ const ProtectedRoute = ({ children }) => {
         });
 
         console.log('response status: ', response.status);
+        console.log('response: ', response);
 
         if (response.ok) {
           const data = await response.json();

@@ -12,7 +12,7 @@ router.get('/callback', passport.authenticate('azuread-openidconnect', {
     failureRedirect: '/auth/error', 
     session: true,
 }), (req, res) => {
-    res.redirect('https://192.168.0.178:3000/agendamento/major');
+    res.redirect('https://192.168.0.178:3000/');
 });
 
 router.get('/error', (req, res) => {
@@ -42,7 +42,8 @@ router.get('/check-auth', (req, res) => {
         console.log('logado');
         return res.json({
             authenticated: true,
-            user: req.user  
+            user: req.user,  
+
         });
     } else {
         console.log('nao logo');

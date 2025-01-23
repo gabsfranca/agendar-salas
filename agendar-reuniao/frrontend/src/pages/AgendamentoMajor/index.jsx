@@ -11,7 +11,7 @@ const AgendamentoMajor = () => {
     const [horarioSelecionado, setHorario] = useState([]);
     const [horariosOcupados, setHorariosOcupados] = useState([]);
     const [formData, setFormData] = useState({
-        name:'',
+        name: '',
         topic:'',
         sede:'major'
     });
@@ -28,7 +28,38 @@ const AgendamentoMajor = () => {
         '17:00','17:30',
     ]
 
+    const [userData, setUserData] = useState(null);
+
     useEffect(() => {
+
+        const fetchUsersData = async () => {
+            try {
+                const response = await fetch('https://192.168.0.178:4000/auth/check-auth', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('pego resposta: ', data);
+                    setFormData(prevData => ({
+                        ...prevData,
+                        name: data.user.displayName || data.user.name || data.user
+                    }));
+
+                    setUserData(data.user);
+                    console.log(userData);
+                }
+            } catch (error) {
+                console.error('erro fetchando dados do usuario: ', error);
+            }
+        };
+
+        fetchUsersData();
+
         const fetchHorariosOcupados = async () => {
             try {
                 const response = await fetch(
