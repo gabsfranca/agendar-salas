@@ -103,6 +103,8 @@ body, html {
   border-radius: 5px;
 }
 
+
+
 .reserva-form button {
   padding: 10px 15px;
   font-size: 16px;
@@ -126,4 +128,62 @@ body, html {
 .titulo-direitinha {
   color: blue;
   margin-bottom: 300px;
+}
+.modal-content {
+  background: #f9f9f9; /* Tom claro suave */
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra mais definida */
+  text-align: center;
+  width: 90%;
+  height: 300px;
+  display: flex; /* Ativa o Flexbox */
+  flex-direction: column; /* Alinha os itens em coluna */
+  justify-content: space-between; /* Espaça os elementos */
+  animation: fadeIn 0.3s ease-out; /* Efeito de transição ao abrir */
+}
+
+.modal-content h2 {
+  margin: 0 0 20px; /* Espaço abaixo do título */
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.modal-content p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0; /* Remove completamente as margens */
+}
+
+.modal-content button {
+  padding: 12px 25px;
+  background-color: #1087FF;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  align-self: center; /* Centraliza horizontalmente */
+}
+
+.modal-content button:hover {
+  background-color: #1087FF; /* Cor mais escura ao passar o mouse */
+  transform: scale(1.05); /* Leve aumento no botão */
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.delete-btn.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 //import 'react-calendar/dist/Calendar.css'; // Importar o estilo do calendário
+import popupHorarioOcupado from '../../components/popup-agendamento/index'
 import './styles.css'
+
 
 const filial = 'major';
 
@@ -10,6 +12,9 @@ const AgendamentoMajor = () => {
     const [date, setDate] = useState(new Date());
     const [horarioSelecionado, setHorario] = useState([]);
     const [horariosOcupados, setHorariosOcupados] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [horarioModal, setHorarioModal] = useState('');
+    const [modalContent, setModalContent] = useState({ title: '', name: '', topic: '' });
     const [formData, setFormData] = useState({
         name: '',
         topic:'',
@@ -88,18 +93,64 @@ const AgendamentoMajor = () => {
         console.log('data selecionada: ', newDate);
     };
 
-    const handleClickHorario = (horario) => {
-        const horarioOcupado = horariosOcupados.find((h) => h.time === horario);
+    const handleDeleteAgendamento = async () => {
+        console.log('botao clicado');
+        const agendamentoData = {
+            name: userData,
+            date: date.toISOString().split('T')[0],
+            time: horarioModal,
+            sede: filial
+        };
 
-        if (horarioOcupado) {
-            alert(`Horário ocupado por: ${horarioOcupado.name}\nTema: ${horarioOcupado.topic}`);
-        }else {
-            setHorario((prev) => 
-                prev.includes(horario) ? prev.filter((h) => h !== horario) : [...prev, horario]
-            );
-            console.log(`horario selecionado: ${horario}`);
+        try {
+            const response = await fetch('https://192.168.0.178:4000/scheduling/agendar', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(agendamentoData),
+            });
+
+            if (response.ok) {
+                alert('Agendamento excluído!');
+                setIsModalOpen(false);
+                setHorario([]);
+                setHorariosOcupados(prev => prev.filter(h => h.time !== horarioSelecionado));
+            } else {
+                alert('erro ao excluir agendamento');
+            }
+        } catch (error) {
+            console.error('erro ao excluir agendamento: ', error);
+            alert('erro ao excluir o agendamento')
         }
-    };
+    }
+
+const handleClickHorario = (horario) => {
+    const horarioOcupado = horariosOcupados.find((h) => h.time === horario);
+
+    if (horarioOcupado) {
+        setModalContent({
+            title: 'Horario Ocupado',
+            name: horarioOcupado.name,
+            topic: horarioOcupado.topic,
+        });
+        console.log('modalContent.name:', modalContent.name);
+        console.log('userData:', userData);
+        console.log('Comparação:', modalContent.name === userData);
+        console.log('Comparando: ', modalContent.name, userData);
+        console.log(typeof modalContent.name, typeof userData);
+        
+        setHorarioModal(horario)
+        setIsModalOpen(true);
+    } else {
+        setHorario((prev) =>
+            prev.includes(horario) ? prev.filter((h) => h !== horario) : [...prev, horario]
+        );
+
+        console.log('Horários selecionados após atualização:', horario); // Log individual
+        console.log('Estado atualizado (horario):', horario); // Log estado
+    }
+};
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -119,6 +170,7 @@ const AgendamentoMajor = () => {
         
         const agendamentoData = {
             ...formData,
+            name:  userData,
             date: date.toISOString().split('T')[0],
             time: horarioSelecionado,
             sede: filial,
@@ -153,6 +205,8 @@ const AgendamentoMajor = () => {
         };
 
         
+
+
     return(
 
         <div className='agendamento'>
@@ -191,6 +245,28 @@ const AgendamentoMajor = () => {
                         );
                     })}
                 </div>
+
+                {isModalOpen && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h2>{modalContent.title}</h2>
+                            <p>Horário ocupado por: {modalContent.name}</p>
+                            <p>Tema da reunião: {modalContent.topic}</p>
+                            <div className="modal-buttons">
+                                <button
+                                    onClick={handleDeleteAgendamento}
+                                    disabled={modalContent.name !== userData}
+                                    className={`delete-btn ${modalContent.name === userData ? '': 'disabled'}`}
+                                    >
+                                        Excluir
+                                </button>
+                                <button onClick={() => setIsModalOpen(false)}>Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+
                 {horarioSelecionado.length > 0 && (
                     <p>
                         horarios selecionados: {horarioSelecionado.join(', ')}

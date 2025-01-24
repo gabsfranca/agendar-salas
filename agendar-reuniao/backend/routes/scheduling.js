@@ -7,6 +7,7 @@ console.log('arquivo importado');
 
 router.post('/agendar', async(req, res) => { 
     const { name, topic, sede, date, time } = req.body;
+    console.log('body recebido: ', req.body);
     if (!name || !topic || !sede || !date || !time) {
         return res.status(400).json({ error: 'todos os campos sao obrigatorios'})
     }
@@ -17,11 +18,15 @@ router.post('/agendar', async(req, res) => {
             VALUES ($1, $2, $3, $4, $5) RETURNING id;
         `;
 
-        const result = await pool.query(query, [name, topic, sede, date, time.join(',')]);
-        res.status(201).json({ message: 'agendamento efetuado com sucesso! ', id: result.rows[0].id });
+        for (const horario of time) {
+            await pool.query(query, [name, topic, sede, date, horario]);
+        }
+
+
+        res.status(201).json({ message: 'agendamento efetuado com sucesso! ' });
 
     } catch (error) {
-        console.error('erro no agendamento');
+        console.error('erro no agendamento: ', error);
         return res.status(500).json({ error: 'nao foi possivel realizar o agendamento'});
     }
 });
@@ -56,5 +61,34 @@ router.get('/horarios', async (req, res) => {
 router.post('/teste', async (req, res) => {
     return res.status(200).json({ message: 'teste '})
 })
+
+router.delete('/agendar', async (req, res) => {
+    const { name, date, time, sede } = req.body;
+
+    console.log('recebido no back: ', req.body);
+
+    if (!name || !date || !time || !sede) {
+        return res.status(400).json({ error: 'ta faltando coisa na exclusao' });
+    }
+
+    try{
+        const query = `
+            DELETE FROM agendamentos
+            WHERE name = $1 and date = $2 AND sede = $3 AND time LIKE $4;
+        `;
+
+        const result = await pool.query(query, [name, date, sede, time]);
+
+        if (result.rowCount > 0) {
+            res.status(200).json({ message: 'Agendamento excluído com sucesso!' });
+        } else {
+            res.status(404).json({ error: 'Agendamento nao encontrado'})
+            console.log('erro no agendamento');
+        } 
+    } catch (error) {
+        console.error('erro ao excluir agendamento: ', error);
+        res.status(500).json({ error: 'erro interno no servidor' });
+    }
+});
 
 module.exports = router;
