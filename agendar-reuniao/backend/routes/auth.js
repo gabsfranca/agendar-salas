@@ -31,20 +31,22 @@ router.get('/profile', (req, res) => {
         return res.redirect('/auth/login');
     }
     res.json({ user: req.user });
+    console.log('info: ', req.user);
 });
 
 router.get('/check-auth', (req, res) => {
-    console.log('Sessão atual:', req.session);
+    // console.log('Sessão atual:', req.session);
     console.log('Usuário atual:', req.user);
+    console.log('É supervisor? ', req.ehsupervisor);
     console.log('Está autenticado?', req.isAuthenticated());
-
     if (req.isAuthenticated()) {
         console.log('logado');
         return res.json({
             authenticated: true,
             user: req.user,  
-
+            ehsupervisor: req.user.ehsupervisor,
         });
+
     } else {
         console.log('nao logo');
         return res.status(401).json({

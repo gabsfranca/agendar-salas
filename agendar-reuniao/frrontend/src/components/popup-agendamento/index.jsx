@@ -12,6 +12,10 @@ const ModalComponent = ({
 }) => {
     if (!isModalOpen) return null;
 
+    console.log('userdata:', userData);
+    console.log('email: ', userData.user.email);
+    console.log('modalcontentname: ',  modalContent.name);
+
     return (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -21,8 +25,8 @@ const ModalComponent = ({
                 <div className="modal-buttons">
                     <button
                         onClick={handleDeleteAgendamento}
-                        disabled={modalContent.name !== userData}
-                        className={`delete-btn ${modalContent.name === userData ? '' : 'disabled'}`}
+                        disabled={modalContent.name !== userData.user.email}
+                        className={`delete-btn ${modalContent.name === userData.user.email ? '' : 'disabled'}`}
                     >
                         Excluir
                     </button>

@@ -6,11 +6,12 @@ const router = express.Router();
 console.log('arquivo importado');
 
 router.post('/agendar', async(req, res) => { 
-    const { name, topic, sede, date, time } = req.body;
+    const { name, topic, sede, date, time, ehsupervisor } = req.body;
     console.log('body recebido: ', req.body);
-    if (!name || !topic || !sede || !date || !time) {
+    if (!name || !topic || !sede || !date || !time || !ehsupervisor) {
         return res.status(400).json({ error: 'todos os campos sao obrigatorios'})
     }
+
 
     try {
         const query = `

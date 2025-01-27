@@ -6,6 +6,7 @@ import ModalComponent from '../popup-agendamento/index';
 import './styles.css';
 
 const AgendamentoPage = ({ filial }) => {
+    
     const [date, setDate] = useState(new Date());
     const [horarioSelecionado, setHorario] = useState([]);
     const [horariosOcupados, setHorariosOcupados] = useState([]);
@@ -13,6 +14,7 @@ const AgendamentoPage = ({ filial }) => {
     const [horarioModal, setHorarioModal] = useState('');
     const [modalContent, setModalContent] = useState({ title: '', name: '', topic: '' });
     const [userData, setUserData] = useState(null);
+    const [ehsupervisor, setEhSupervisor] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         topic:'',
@@ -42,23 +44,30 @@ const AgendamentoPage = ({ filial }) => {
                     }
                 });
 
+                console.log('response: ',response.body);
+
                 if (response.ok) {
                     const data = await response.json();
                     console.log('pego a resposta: ', data);
                     setFormData(prevData => ({
                         ...prevData,
-                        name: data.user.displayName || data.user.name || data.user
+                        name: data.user.email,
+                        ehsupervisor: data.user.ehsupervisor
                     }));
 
-                    setUserData(data.user);
-                    console.log(userData);
+                    setEhSupervisor(data.ehsupervisor)
+                    console.log('é sup? ', data.ehsupervisor);
+                    setUserData(data);
+                    console.log('dados usuario: ', data);
                 } 
             }catch (error) {
                 console.error('erro fetchando os dados: ', error);
+                
             }
-        };
-
+        };  
         fetchUsersData();
+
+        
 
         const fetchHorariosOcupados = async () => {
             try {
@@ -131,14 +140,20 @@ const AgendamentoPage = ({ filial }) => {
             alert('selecione pelo menos um horário!!');
             return;
         }
+
+        console.log('deu boa?', userData);
+
+
         
         const agendamentoData = {
             ...formData,
-            name:  userData,
             date: date.toISOString().split('T')[0],
             time: horarioSelecionado,
             sede: filial,
+            
         };
+
+        console.log('formdata: ', formData);
 
         try{
             const response = await fetch('https://192.168.0.178:4000/scheduling/agendar', {
@@ -150,6 +165,11 @@ const AgendamentoPage = ({ filial }) => {
             });
 
             console.log(response);
+
+            if (!ehsupervisor) {
+                alert('Apenas supervisores podem realizar agendamentos: ', ehsupervisor);
+                return;
+            }
 
             if (response.ok) {
                 console.log('enviado: ', response);
@@ -172,11 +192,13 @@ const AgendamentoPage = ({ filial }) => {
     const handleDeleteAgendamento = async () => {
         console.log('botao apagar clicado');
         const agendamentoData = {
-            name: userData,
+            name: userData.user.email,
             date: date.toISOString().split('T')[0],
             time: horarioModal,
             sede: filial
         };
+
+        console.log('agendamento data: ', agendamentoData);
 
         try {
             const response = await fetch('https://192.168.0.178:4000/scheduling/agendar', {

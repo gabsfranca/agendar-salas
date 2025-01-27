@@ -64,9 +64,13 @@ passport.use(
                 }
 
                 const userQuery = await pool.query(
-                    'SELECT * FROM usuarios WHERE email = $1',
+                    'SELECT email, ehSupervisor FROM usuarios WHERE email = $1',
                     [email]
                 );
+
+                
+
+
 
                 if (userQuery.rowCount === 0) {
                     console.log('usuario nao encontrado, inserindo no banco: ', email);
@@ -74,9 +78,12 @@ passport.use(
                         `INSERT INTO usuarios (email, nome) VALUES ($1, $2)`,
                         [email, profile.displayName]
                     );
+
+                } else {
+                    user = userQuery.rows[0];
                 }
 
-                return done(null, email);
+                return done(null, user);
             } catch (error) {
                 console.log('erro no callbakc do passport: ', error);
                 return done(error, null);
