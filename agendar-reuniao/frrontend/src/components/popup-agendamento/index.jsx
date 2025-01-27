@@ -1,21 +1,36 @@
-// Modal.js
 import React from 'react';
-import './styles.css'; // Você pode criar estilos separados para o modal.
+import './styles.css';
 
-const popupHorarioOcupado = ({ isOpen, onClose, title, content }) => {
-  if (!isOpen) return null;
+const ModalComponent = ({
+    isModalOpen,
+    modalContent,
+    userData,
+    handleDeleteAgendamento,
+    closeModal,
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>{title}</h2>
-        <p>{content}</p>
-        <button className="close-button" onClick={onClose}>
-          Fechar
-        </button>
-      </div>
-    </div>
-  );
+    
+}) => {
+    if (!isModalOpen) return null;
+
+    return (
+        <div className="modal-overlay">
+            <div className="modal-content">
+                <h2>{modalContent.title}</h2>
+                <p>Horário ocupado por: {modalContent.name}</p>
+                <p>Tema da reunião: {modalContent.topic}</p>
+                <div className="modal-buttons">
+                    <button
+                        onClick={handleDeleteAgendamento}
+                        disabled={modalContent.name !== userData}
+                        className={`delete-btn ${modalContent.name === userData ? '' : 'disabled'}`}
+                    >
+                        Excluir
+                    </button>
+                    <button onClick={closeModal}>Fechar</button>
+                </div>
+            </div>
+        </div>
+    );
 };
 
-export default popupHorarioOcupado;
+export default ModalComponent;

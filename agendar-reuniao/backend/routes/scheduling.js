@@ -32,7 +32,6 @@ router.post('/agendar', async(req, res) => {
 });
 
 router.get('/horarios', async (req, res) => {
-    console.log('rota acessada');
     const { date, sede } = req.query;
     if (!date || !sede) {
         return res.status(400).json({ error: 'faltam paramentros' });

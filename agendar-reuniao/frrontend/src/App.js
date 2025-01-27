@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Use Routes em vez de Switch
 import Home from './pages/Home';
-import AgendamentoMajor from './pages/AgendamentoMajor';
+
 import './App.css';
-import AgendamentoAlagoas from './pages/AgendamentoAlagos';
+
 import ProtectedRoute from './components/protected-route/protected-route';
+import AgendamentoPage from './components/pagina-agendamento';
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
         path="/agendamento/major"
         element={
           <ProtectedRoute>
-            <AgendamentoMajor/>
+            <AgendamentoPage filial={'major'}/>
           </ProtectedRoute>
           }
         />
@@ -29,7 +30,7 @@ function App() {
         path="/agendamento/alagoas"
         element={
           <ProtectedRoute>
-            <AgendamentoAlagoas/>
+            <AgendamentoPage filial={'alagoas'}/>
           </ProtectedRoute>
         }
       />
