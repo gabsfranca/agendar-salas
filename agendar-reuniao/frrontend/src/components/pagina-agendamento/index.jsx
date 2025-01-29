@@ -4,6 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import HorariosComponent from '../horarios/index';
 import ModalComponent from '../popup-agendamento/index';
 import './styles.css';
+import ModalConvidar from '../modal-convite';
 
 const AgendamentoPage = ({ filial }) => {
     
@@ -15,6 +16,9 @@ const AgendamentoPage = ({ filial }) => {
     const [modalContent, setModalContent] = useState({ title: '', name: '', topic: '' });
     const [userData, setUserData] = useState(null);
     const [ehsupervisor, setEhSupervisor] = useState(null);
+    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const [formData, setFormData] = useState({
         name: '',
         topic:'',
@@ -57,6 +61,7 @@ const AgendamentoPage = ({ filial }) => {
 
                     setEhSupervisor(data.ehsupervisor)
                     console.log('é sup? ', data.ehsupervisor);
+                    console.log('email: ', data.user.email);
                     setUserData(data);
                     console.log('dados usuario: ', data);
                 } 
@@ -111,7 +116,7 @@ const AgendamentoPage = ({ filial }) => {
             });
             console.log('modalContent.name:', modalContent.name);
             console.log('userData:', userData);
-            console.log('Comparação:', modalContent.name === userData);
+            console.log('Comparação:', modalContent.name === userData.user.email);
             console.log('Comparando: ', modalContent.name, userData);
             console.log(typeof modalContent.name, typeof userData);
             setHorarioModal(horario);
@@ -147,6 +152,8 @@ const AgendamentoPage = ({ filial }) => {
         
         const agendamentoData = {
             ...formData,
+            name: userData.user.email,
+            ehsupervisor: userData.user.ehsupervisor,
             date: date.toISOString().split('T')[0],
             time: horarioSelecionado,
             sede: filial,
@@ -223,6 +230,44 @@ const AgendamentoPage = ({ filial }) => {
         }
     }
 
+    const fetchUsers = async () => {
+        try {
+            console.log('buscando usuarios...');
+            const response = await fetch('https://192.168.0.178:4000/email/users');
+            if (response.ok) {
+                const data = await response.json();
+                console.log('usuarios buscados: ', data);
+                setUsers(data);
+            } else {
+                console.error('erro ao buscar usuarios: ', response.statusText);
+            }
+        } catch (error) {
+            console.error('erro ao buscar usuarios: ', error);
+        }
+    };
+    
+
+    const toggleUserSelection = (userID) => {
+        setSelectedUsers((prev) => {
+            if (prev.includes(userID)) {
+                return prev.filter((id) => id !== userID);
+            } else {
+                return [...prev, userID]
+            }
+        }
+            
+        );
+    };
+
+    const openInviteModal = () => {
+        fetchUsers();
+        setIsInviteModalOpen(true);
+    };
+
+    const closeInviteModal = () => {
+        setIsInviteModalOpen(false);
+    };
+
     return (
         <div className="agendamento">
             <div className="esquerdinha" id='esquerda'>
@@ -267,11 +312,19 @@ const AgendamentoPage = ({ filial }) => {
                             required
                         />
                     </label>
+                    <ModalConvidar
+                        isOpen={isInviteModalOpen}
+                        users={users}
+                        selectedUsers={selectedUsers}
+                        toggleUserSelection={toggleUserSelection}
+                        closeModal={closeInviteModal}
+                    />
                     <button
-                        type='submit'
+                        type='button'
                         disabled={horarioSelecionado.length === 0}
+                        onClick={openInviteModal}
                     >
-                        reservar
+                        Convidar
                     </button>
                 </form>
             </div>

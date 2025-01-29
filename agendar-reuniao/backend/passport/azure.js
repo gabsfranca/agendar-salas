@@ -2,11 +2,11 @@ const passport = require('passport');
 const { OIDCStrategy } = require('passport-azure-ad');
 const pool = require('../config/db');
 
+
 passport.serializeUser((user, done) => {
     console.log('Serializing user: ', user);
     done(null, user)
 });
-
 
 passport.deserializeUser((obj, done) => {
     // console.log('deserializing user w email: ', email);
