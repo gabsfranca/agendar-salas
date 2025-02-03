@@ -29,6 +29,7 @@
     gap: 10px; /* Espaçamento entre os botões */
     margin-top: 20px; /* Adiciona um espaçamento superior */
     justify-content: center;
+    align-items: center;
 }
 
 .close-button {

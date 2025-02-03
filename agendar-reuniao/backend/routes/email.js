@@ -6,22 +6,38 @@ const { TokenCredentialAuthenticationProvider } = require('@microsoft/microsoft-
 
 const router = express.Router();
 
-const credential = new InteractiveBrowserCredential({
-    clientId: process.env.CLIENT_ID,
-    tentantId: process.env.TENANT_ID,
-    redirectUri: 'https://192.168.0.178:4000/auth/callback'
-});
+// const credential = new InteractiveBrowserCredential({
+//     clientId: process.env.CLIENT_ID,
+//     tentantId: process.env.TENANT_ID,
+//     redirectUri: 'https://192.168.0.178:4000/auth/callback'
+// });
 
-const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-    scopes: ['Calendars.ReadWrite', 'Calendars.ReadWrite.Shared']
+const clientSecretCredential = new ClientSecretCredential(
+    process.env.TENANT_ID,
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET
+)
+
+const authProvider = new TokenCredentialAuthenticationProvider(clientSecretCredential, {
+    scopes: ['https://graph.microsoft.com/.default']
 });
 
 const client = Client.initWithMiddleware({
-    authProvider: authProvider
+    authProvider
 });
 
+
 const createMeeting = async (meetingDetails) => {
-    const { subject, startTime, attendees, description } = meetingDetails;
+    const { subject, startTime, endTime, attendees = [], description } = meetingDetails;
+
+    console.log('meetingDetails: ', meetingDetails);
+
+    console.log('subject: ', subject);
+    console.log('startTime: ', startTime);
+    console.log('endTime: ', endTime);
+    console.log('attendees: ', attendees);
+    console.log('description: ', description);
+
 
     const event = {
         subject: subject,
@@ -46,48 +62,37 @@ const createMeeting = async (meetingDetails) => {
     };
 
     try {
-        const result = await client.api('/me/events')
+        const result = await client.api('/users/gabriel.menegasso@similar.ind.br/events')
             .post(event);
 
         console.log('reuniao criada: ', result);
         return result;
     } catch (error) {
-        console.error('erro ao criar reuniao: ', error);
-        throw error;
+        console.error('erro ao criar reuniao: ', error.response?.data || error.message);
+        throw new Error('Falha ao criar reunião: ' + (error.response?.data?.erro?.message || error.message));
     }
 };
 
-router.post('/createMeeting', async (req, res) => {
-    try {
-        const { subject, startTime, endTime, attendees, description } = req.body;
+router.post('/createMeeting', async(req, res) => {
+    try{
 
-        if (!subject || !startTime || !endTime || !attendees ) {
-            console.log('falta coisa na req da reuniao');
-            return res.status(400).json({
-                error: 'dados incompletos',
-                message: 'falta coisa na req da reuniao'
-            });
-        }   
+        console.log('meetingDetails antes: ', req.body);
 
-        const meetingDetails = {
-            subject, 
-            startTime, 
-            endTime,
-            attendees,
-            description
-        };
+        const meetingDetails = req.body;
+
+        if (!Array.isArray(meetingDetails.attendees)) {
+            meetingDetails.attendees = [];
+        }
 
         const result = await createMeeting(meetingDetails);
+        res.status(201).json(result);
 
-        return res.status(200).json({
-            message: 'reuniao criada',
-            meetingDetails: result
-        });
+        console.log(meetingDetails);
     } catch (error) {
-        console.error('erro na rota createmeeting: ', error);
-        return res.status(500).json({
-            error: 'erro ao criar reuniao',
-            details: error.message
+        console.error('erro na rota: ', error);
+        res.status(500).json({
+            error: error.message,
+            details: error.message?.data || null
         });
     }
 });

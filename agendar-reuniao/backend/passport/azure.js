@@ -64,7 +64,7 @@ passport.use(
                 }
 
                 const userQuery = await pool.query(
-                    'SELECT email, ehSupervisor FROM usuarios WHERE email = $1',
+                    'SELECT email, ehsupervisor FROM usuarios WHERE email = $1',
                     [email]
                 );
 
