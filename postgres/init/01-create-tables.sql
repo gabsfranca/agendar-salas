@@ -1,0 +1,17 @@
+
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    ehsupervisor BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS agendamentos (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    topic VARCHAR(50) NOT NULL,
+    sede VARCHAR(50) NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL
+);
